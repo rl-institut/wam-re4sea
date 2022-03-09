@@ -1,5 +1,6 @@
-# rli_template
-Template repository for creating new projects under the RLI's umbrella
+# Re4SEA
+
+The „Re4SEA“ webmap aims to visualise existing climate change risks on Southeast Asian islands and gives an overview of expected extra investment cost for energy system components to mitigate these risks. Sea-level rise, temperature increase, flooding and cyclones are considered to have substantial impacts on current and future energy infrastructure. In order to assess the islands specific situation, these risks are scaled and shown on the webmap. To detect risk patterns in the Southeast Asian region, the islands are clustered according to their site-specific risk profile. These risk cluster are also visualized on the webmap. By clicking on islands, further information is given on projected extra investment cost for different energy system components to mitigate island-specific risks. 
 
 ## Get started
 
