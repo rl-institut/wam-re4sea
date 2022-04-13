@@ -1,0 +1,12 @@
+export const layersVisualizationCheckbox = document.getElementById('layersVisualizationCheckbox');
+export const islandInformationTablecontainer = document.getElementById('islandInformationTablecontainer');
+export const adaptationMeasureUl =  document.getElementById('adaptationMeasureUl');
+export const lengendContainer = document.getElementById('lengendContainerId');
+export const gotoLatLongButton = document.getElementById('gotoLatLongButton');
+export const adaptationModal = document.getElementById('adaptationModal');
+export const legendCardBody =  document.getElementById('legendCardBody');
+export const searchInput = document.getElementById('searchInput');
+export const statsChart =  document.getElementById('statsChart');
+export const downloadButton = document.getElementById('downloadButton');
+export const toggleInformationSideBarButton = document.getElementById('toggleInformationSideBarBtn');
+export const seeMoreBtn = document.getElementById('seeMoreBtn');

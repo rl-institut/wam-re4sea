@@ -1,0 +1,123 @@
+body {
+  overflow: hidden;
+}
+.content-wrapper {
+  min-height: calc(100vh - var(--header-height));
+  width: 100%;
+}
+
+.left-menu {
+  width: 100%;
+}
+
+.left-menu .left-menu__item {
+  display: flex;
+  align-items: center;
+  border-bottom: var(--border-1);
+  width: 100%;
+  padding: 4px 4px;
+}
+
+.left-menu .left-menu__item button {
+  display: inline-flex;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  color: var(--text-white);
+  border-radius: var(--border-radius-1);
+  border: none;
+  background: none;
+  
+}
+
+
+.left-menu .left-menu__item button.active{
+  background-color: var(--color-blue-light);
+}
+
+.data-processing-table {
+  width: 40rem;
+}
+
+.expert-interview-table {
+  width: 40rem
+}
+
+.content-right {
+  background-color: var(--color-primary);
+  background: var(--color-tertiary);
+  color: var(--text-white);
+  border: 14px solid var(--color-primary);
+  border-radius: var(--border-radius-1);
+  height: calc(100vh - var(--header-height - 1rem));
+  overflow-x: auto;
+}
+
+/* styling scrollbar */
+
+.content-right::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px var(--color-primary);
+	background-color: #F5F5F5;
+}
+
+.content-right::-webkit-scrollbar
+{
+	width: 10px;
+	background-color: #F5F5F5;
+}
+
+.content-right::-webkit-scrollbar-thumb
+{
+	background-color: var(--color-secondary);
+	border: 2px solid var(--color-primary);
+}
+
+/* Media queries */
+
+@media screen and (min-width: 576px)  {
+  .left-menu .left-menu__item {
+    margin-top: 1rem;
+  }
+
+  .content-right {
+    width: 100%;
+  }
+
+}
+
+@media screen and (min-width: 200px) and (max-width: 767px){
+  .content-wrapper {
+    flex-direction: column;
+  }
+  section {
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+  }
+
+  .content-right {
+    height: calc(100vh - var(--header-height) * 2);
+  }
+
+  #menu {
+    flex-direction: row !important;
+  }
+
+  .left-menu .left-menu__item {
+    width: auto;
+    margin-top: 0;
+  }
+
+  
+
+  .nav-link {
+    padding: 0.5rem;
+  }
+
+  .left-menu .left-menu__item {
+    border: none;
+  }
+  
+}
+
+
