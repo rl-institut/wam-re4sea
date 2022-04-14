@@ -1,170 +1,184 @@
-## Development
+# Collaborative Development
 
-### Prerequisites
+## Prerequisites
 
 - [Git](https://git-scm.com/)
+- [GitHub](https://github.com/)
+
+## Types of interaction
+
+### A. Use
+
+Since the open license allows free use, no notification is required. 
+However, for the authors it is valuable information who uses the software for what purpose. 
+Indicators are `Watch`, `Fork` and `Starred` of the repository. 
+If you are a user, please add your name and details in USERS.cff
+
+### B. Comment
+
+You can give ideas, hints or report bugs in issues, in PR, at meetings or other channels. 
+This is no development but can be considered a notable contribution. 
+If you wish, add your name and details to `CITATION.cff`.
+
+### C. Contribute and Review
+
+You add code and become an author of the repository. 
+You must follow the workflow!
+
+### D. Mantain and Release
+
+You contribute and take care of the repository. 
+You review and answer questions. 
+You coordinate and carry out the release.
 
 
-### Philosophy
+## Workflow
 
-Development of a feature for this repository should follow the workflow described 
-by [Vincent Driessen](https://nvie.com/posts/a-successful-git-branching-model/).
+The workflow for contributing to this project has been inspired by the workflow described by [Vincent Driessen](https://nvie.com/posts/a-successful-git-branching-model/).
 
-Here are the minimal procedure you should follow : 
 
-#### Step 1: Describe the issue on github
+### 1. Describe the issue on GitHub
 
 Create [an issue](https://help.github.com/en/articles/creating-an-issue)
-on the github repository, describing the problem you will then address
-with your feature/fix. This is an important step as it forces one to
-think about the issue (to describe an issue to others, one has to think
-it through first).
-
-#### Step 2: Solve the issue locally
-
-1. Create a separate branch from `dev`, to work on
-    ```bash
-    git checkout -b feature/myfeature dev
-    ```
-    The convention is to always have `feature/` in the branch name. The `myfeature` part should describe shortly what the feature is about (separate words with `-`).
-    If you are fixing and error you can replace `feature/` by `fix/`.
-2. Try to follow [these conventions](https://chris.beams.io/posts/git-commit) for commit messages:
-    - Keep the subject line [short](https://chris.beams.io/posts/git-commit/#limit-50) (i.e. do not commit more than a few changes at the time)
-    - Use [imperative](https://chris.beams.io/posts/git-commit/#imperative) for commit messages 
-    - Do not end the commit message with a [period](https://chris.beams.io/posts/git-commit/#end) 
-        You can use 
-        ```bash
-        git commit --amend
-        ```
-        to edit the commit message of your latest commit (provided it is not already pushed on the remote server).
-        With `--amend` you can even add/modify changes to the commit.
-
-3. Push your local branch on the remote server `origin`
-    ```bash
-    git push
-    ```
-    If your branch does not exist on the remote server yet, git will provide you with instructions, simply follow them.
+in the GitHub repository. 
+The `issue title` describes the problem you will address. 
+This is an important step as it forces one to think about the "issue".
+Make a checklist for all needed steps.
 
 
-#### Step 3: Run tests locally
+### 2. Solve the issue locally
 
-To run tests locally, install the dependencies 
-```bash 
-pip install -r tests/test_requirements.txt 
+#### 2.0. Get the latest version of the `develop` branch
+
+Load the `develop branch`:
+```bash
+git checkout develop
 ```
 
-1. Integration/unit tests 
-    ```bash
-    pytest tests
-    ```
-2.  Linting tests
-    ```bash
-    flake8
-    ```
-    and
-    ```bash
-    pylint
-    ```
-    You can fix the linting errors either manually or with the packages
-    `autopep8` or `black` for example.
-    
-#### Step 4: Submit a pull request (PR)
-
-Follow the [steps](https://help.github.com/en/articles/creating-a-pull-request) of the github help to create the PR.
-Please note that you PR should be directed from your branch (for example `myfeature`) towards the branch `dev`.
-
-Add a line `Fix #<number of the issue created in Step 2.0>` in the
-description of your PR, so that when it is merged, it automatically
-closes the issue once your code gets merged into the default branch of
-your repository.
-[Here](https://help.github.com/en/github/managing-your-work-on-github/closing-issues-using-keywords)
-is a list of other keywords you can use to automatically close the
-issues
-
-#### Step 5: Setup continuous integration
-
-To have the test run automatically everytime you push to a pull request
-you can add the bash commands under `# command to run tests` of the
-`.travis.yml` file. For this you need to have an account by
-[Travis](https://travis-ci.org/) and link your repo to their service.
-Soon [GitHub action](https://github.com/features/actions) might take
-care of this directly within github.
-
-In the `.travis.yml` file are many options commented out, you can have
-very complexe schemes to test on many different python versions etc. For
-more information look at Travis
-[doc](https://docs.travis-ci.com/user/languages/python/) for python.
-
-## Release protocol
-
-Once you are ready to publish a release, branch off from `dev`
-    ```bash
-    git checkout -b release/vX.Y.Z dev
-    ```
-For meaning of X, Y and Z version numbers, please refer to this [semantic versioning guidelines](https://semver.org/spec/v2.0.0.html).
-
-In this branch, you should normally only update the version number in the `CHANGELOG.md` and `setup.py` files.
-
-Your `CHANGELOG.md` file could look like this before the release
-```
-## [unreleased]
-
-### Added
-- feature 1
-- feature 2
-### Changed 
-- thing 1
-- thing 2
-### Removed
-- some stuff
-```
-
-Simply replace `unreleased` by `X.Y.Z` and add the date of release in [ISO format](https://xkcd.com/1179/), then add the structure for a new `unreleased` version
-
-```
-## [unreleased]
-
-### Added
--
-### Changed 
--
-### Removed
--
-
-## [X.Y.Z] - 20**-**-**
-### Added
-- feature 1
-- feature 2
-### Changed 
-- thing 1
-- thing 2
-### Removed
-- some stuff
-```
-
-After pushing these changes, create a pull request from `release/vX.Y.Z` towards `master` and merge it in `master`.
-
-Locally, merge `release/vX.Y.Z` into `dev`
-```
-git checkout release/vX.Y.Z
-```
-
-```
+Update with the latest version:
+```bash
 git pull
 ```
-    
-```
-git checkout dev
+
+#### 2.1. Create a new (local) branch
+
+```bash
+git checkout -b feature-1314-my-feature
 ```
 
+Naming convention for branches: `type`-`issue-nr`-`short-description`
+
+##### type
+
+* main / stable / (master) - includes the current stable version
+* develop - includes all current developments
+* feature - includes the feature that will be implemented
+* hotfix - includes small improvements before an release, should be branched from a release branch
+* release - includes the current version to be released
+
+The majority of the development will be done in `feature` branches.
+
+##### issue-nr
+
+The `issueNumber` should be taken from Step 1. Do not use the "#". 
+
+##### short-description
+
+Describe shortly what the branch is about. 
+Avoid long and short descriptive names for branches, 2-4 words are optimal.
+
+Other hints:
+- Separate words with `-` (minus)
+- Avoid using capital letters
+- Do not put your name to the branch name, it's a collaborative project
+- Branch names should be precise and informative
+
+Examples of branch names: `feature-42-add-new-ontology-class` or `feature-911-branch-naming-convention`
+
+#### 2.2. Start editing the files
+
+- Divide your feature into small logical units
+- Start to write the documentation or a docstring
+- Don't rush, have the commit messages in mind
+- Add your changes to the CHANGELOG.md
+
+On first commit to the repo:
+- Add your name and details to CITATION.cff
+
+#### 2.3. Commit your changes 
+
+```bash
+git commit filename.md
+``` 
+
+Write a good `commit message`:
+- "If applied, this commit will ..."
+- Follow [existing conventions for commit messages](https://chris.beams.io/posts/git-commit)
+- Keep the subject line [shorter than 50 characters](https://chris.beams.io/posts/git-commit/#limit-50)
+- Do not commit more than a few changes at the time: [atomic commits](https://en.wikipedia.org/wiki/Atomic_commit)
+- Use [imperative](https://chris.beams.io/posts/git-commit/#imperative)
+- Do not end the commit message with a [period](https://chris.beams.io/posts/git-commit/#end) ~~.~~ 
+- Allways end the commit message with the `issueNumber` including the "#"
+
+Examples of commit message: `Added function with some method #42` or `Update documentation for commit messages #1`
+
+#### 2.4 Fix your latest commit message
+
+You want to improve your latest commit message? 
+Your latest commit is not pushed yet? 
+Edit the commit message of your latest commit:
+
+```bash
+git commit --amend
 ```
-git merge release/vX.Y.Z
+
+
+### 3. Push your `local` branch on the remote server `origin`
+
+If your branch does not exist on the remote server yet, use:
+
+```bash
+git push --set-upstream origin feature-1314-my-feature
 ```
-And push your these updates to the remote
-```
+
+Then push regularly with:
+
+```bash
 git push
 ```
 
-The idea behind this procedure is to avoid creating a merge commit in `dev` (because `master` would otherwise have two merge commit for this release once you merge the next release).
 
-Finally, [create a release](https://help.github.com/en/github/administering-a-repository/creating-releases) on github. Please choose master as the target for the tag and format the tag as `vX.Y.Z`. In the description field simply copy-paste the content of the `CHANGELOG`descriptions for this release and you're done!
+### 4. Submit a pull request (PR)
+
+Follow the GitHub guide [creating-a-pull-request](https://help.github.com/en/articles/creating-a-pull-request).
+The PR should be directed: `base: develop` <- `compare: feature-1-collaboration`.
+
+Add the line `Close #<issue-number>` in the description of your PR.
+When it is merged, it [automatically closes](https://help.github.com/en/github/managing-your-work-on-github/closing-issues-using-keywords) the issue.
+
+Assign a reviewer and get in contact.
+
+#### 4.0. Review the PR
+
+Follow the GitHub guide [approving a pull request with required reviews](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/approving-a-pull-request-with-required-reviews).
+Leave a small comment and some nice words of thanks.
+
+#### 4.1. Merge the PR
+
+Follow the GitHub guide [merging a pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/merging-a-pull-request).
+
+#### 4.2. Delete the feature branch
+
+Follow the GitHub guide [deleting a branch](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-and-deleting-branches-within-your-repository#deleting-a-branch).
+
+### 5. Close the issue
+
+Document the result in a few sentences and close the issue.
+Check that all steps have been documented:
+
+- Issue title describes the problem you solved?
+- All commit messages are linked in the issue?
+- The branch was deleted?
+- Entry in CHANGELOG.md?
+- PR is closed?
+- Issue is closed?
