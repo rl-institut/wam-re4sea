@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  web:
+    container_name: re4sea
+    build:
+      context: ./
+      target: dev
+    volumes:
+      - .:/src
+    command: npm start
+    ports:
+      - "8081:8081"
+    environment:
+      NODE_ENV: development
+      DEBUG: nodejs-docker-express:*
