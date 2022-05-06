@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <script src='https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js'></script>
+  <link href='https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css' rel='stylesheet' />
+
+  <title>Re4Sea</title>
+  <!-- index state -->
+  <script>
+    const state = {
+      pointClicked: false,
+      currentStyle: null,
+      popupProperties: null
+    };
+  </script>
+
+</head>
+
+<body>
+  <div class="container-fluid p-0">
+    <header class="p-0 d-none d-md-block">
+      <nav class="navbar navbar-dark cbg-primary">
+        <div class="container-fluid d-flex justify-content-space-between">
+          <div class="d-flex">
+            <a href="/" class="navbar-brand mx-4">Re4SEA</a>
+            <div class="">
+              <a class="nav-link header-nav-link" href="/about">
+                <div class="nav-icon cbg-yellow mx-2">
+                  <i class="bi bi-info-square"></i>
+                </div>
+                <span class="ms-1 d-none d-sm-inline header-nav-link__text">ABOUT US</span>
+              </a>
+            </div>
+          </div>
+
+          <form class="d-none d-md-flex  search">
+            <i class="bi bi-search"></i>
+            <input class="form-control mx-2 search__input" type="search" placeholder="Go to Longitude, Latitude"
+              aria-label="Search" id="searchInput">
+            <button type="button" class="me-2 goto-button" id="gotoLatLongButton">Go</button>
+          </form>
+        </div>
+      </nav>
+    </header>
+
+    <!-- input to search coordinate only visible  for small screens -->
+
+    <form class="d-sm-flex d-md-none shadow search">
+      <i class="bi bi-search"></i>
+      <input class="form-control mx-2 search__input" type="search" placeholder="Go to Longitude, Latitude"
+        aria-label="Search" id="searchInput">
+      <button type="button" class="me-2 goto-button" id="gotoLatLongButton">Go</button>
+    </form>
+
+  <!-- Go to about page only visible on small screens-->
+    <a class="about-us-link d-sm-block d-md-none" href="/about"><i class="bi bi-box-arrow-right"></i>&nbsp;<span>About Us</span></a>
+
+    <section class="container-fluid d-flex content-wrapper p-0">
+      <aside class="d-md-flex data-section pt-5 px-3 cbg-tertiary data-section--hidden">
+        <div class="accordion accordion-flush w-100" id="dataAccordion">
+          <!-- INFORMATION ACCORDION STARTS HERE -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="infoHeading">
+
+              <button class="btn accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapseInfo" aria-expanded="true" aria-controls="collapseInfo">
+                <i class="bi bi-file-earmark-fill"></i>
+                <span class="ms-2">INFORMATION</span>
+              </button>
+            </h2>
+            <div id="collapseInfo" class="accordion-collapse collapse" aria-labelledby="infoHeading"
+              data-bs-parent="#dataAccordion">
+              <div class="accordion-body cbg-primary" id="islandInformationTablecontainer">
+                <!-- information table enters here -->
+              </div>
+            </div>
+          </div>
+
+          <!-- INFORMATION ACCORDION ENDS HERE -->
+
+          <!-- STATISTICAL VISUALIZAITON ACCORDION STARTS HERE -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="statsViewHeading">
+              <button class="btn accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapseStatsView" aria-expanded="false" aria-controls="collapseStatsview">
+                <i class="bi bi-bar-chart-fill"></i>
+                <span class="ms-2">STATISTICAL VISUALIZAITON</span>
+              </button>
+            </h2>
+            <div id="collapseStatsView" class="accordion-collapse collapse" aria-labelledby="statsViewHeading"
+              data-bs-parent="#dataAccordion">
+              <div class="accordion-body cbg-primary" id="statsChartContainerId">
+                <canvas class="bg-light" id="statsChart" width="400" height="400"></canvas>
+              </div>
+            </div>
+
+          </div>
+          <!-- ADAPTATION MEASURE ACCORDION STARTS HERE -->
+          <div class="accordion-item">
+            <h2 class="accordion-header collapsed" id="adaptationMeasureHeading">
+              <button class="btn accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapseAdaptationMeasure" aria-expanded="false"
+                aria-controls="collapseAdaptationMeasure">
+                <i class="bi bi-tools"></i>
+                <span class="ms-2">ADAPTATION MEASURE</span>
+              </button>
+            </h2>
+            <div id="collapseAdaptationMeasure" class="accordion-collapse collapse"
+              aria-labelledby="adaptationMeasureHeading" data-bs-parent="#dataAccordion">
+              <div class="accordion-body cbg-primary" id="adaptationMeasureUlContainer">
+                <ul class="list-group-flush m-0 p-0" id="adaptationMeasureUl">
+                  <!-- Adaptation measure enters here -->
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- sidebar with information toggle button -->
+        <button class="shadow" id="toggleInformationSideBarBtn" type="button">
+          <i class="bi bi-arrow-bar-right information-sidebar-open"></i>
+          <i class="bi bi-arrow-bar-left information-sidebar-close"></i>
+        </button>
+      </aside>
+      <main class="map-section">
+        <!-- Map div -->
+        <div id="map"></div>
+
+        <!-- download button -->
+        <button type="button" id="downloadButton" title="download data"> <i class="bi bi-cloud-download shadow"></i> </button>
+
+        <!-- Map Legend Accordion-->
+        <div class="card lengend-container shadow" id="lengendContainerId">
+          <div class="card-header p-1">
+            <div class="form-check" id="layersVisualizationCheckboxContainer">
+              <input type="checkbox" class="form-check-input" id="layersVisualizationCheckbox">
+              <label class="form-check-label" for="layersVisualizationCheckbox">Visualize climate risk</label>
+            </div>
+          </div>
+          <div class="card-body list-group-flush cbg-grey-light p-1 d-flex flex-column" id="legendCardBody">
+            <div class="selected list-group-item  cbg-grey-light p-1">
+              <button class="bg-transparent d-flex justify-content-between"
+                data-layer='temperature'><span>Temperature</span><span class="icon"><i
+                    class="bi bi-chevron-up"></i></span></button>
+              <div class="map-legend temperature-legend d-flex mt-1">
+                <span><small>1</small></span>
+                <span><small>2</small></span>
+                <span><small>3</small></span>
+                <span><small>4</small></span>
+                <span><small>5</small></span>
+              </div>
+            </div>
+
+            <div class="list-group-item p-1 cbg-grey-light mt-1 unselected">
+              <button class="bg-transparent d-flex justify-content-between" data-layer='flood'><span>Flood</span><span
+                  class="icon"><i class="bi bi-chevron-up"></i></span></button>
+              <div class="map-legend flood-legend d-flex ">
+                <span><small>1</small></span>
+                <span><small>2</small></span>
+                <span><small>3</small></span>
+                <span><small>4</small></span>
+                <span class="label-span-end"><small>5</small></span>
+              </div>
+            </div>
+
+            <div class="list-group-item p-1 cbg-grey-light mt-1 unselected">
+              <button class="bg-transparent d-flex justify-content-between"
+                data-layer='cyclone'><span>Cyclone</span><span class="icon"><i
+                    class="bi bi-chevron-up"></i></span></button>
+              <div class="map-legend cyclone-legend d-flex">
+                <span><small>1</small></span>
+                <span><small>2</small></span>
+                <span><small>3</small></span>
+                <span class="label-span-end"><small>4</small></span>
+              </div>
+            </div>
+
+            <div class="list-group-item p-1 cbg-grey-light mt-1 unselected">
+              <button class="bg-transparent d-flex justify-content-between"
+                data-layer='sea-level'><span>Sea-level</span><span class="icon"><i
+                    class="bi bi-chevron-up"></i></span></button>
+              <div class="map-legend sea-level-legend d-flex">
+                <span><small>0</small></span>
+                <span><small>1</small></span>
+                <span><small>2</small></span>
+                <span><small>3</small></span>
+                <span><small>4</small></span>
+                <span class="label-span-end"><small>5</small></span>
+              </div>
+            </div>
+
+            <div class="list-group-item p-1 cbg-grey-light mt-1 unselected">
+              <button class="bg-transparent d-flex justify-content-between" data-layer='risk-cluster'><span>Risk
+                  Cluster</span><span class="icon"><i class="bi bi-chevron-up"></i></span></button>
+              <div class="map-legend risk-cluster-legend d-flex">
+                <span><small>1</small></span>
+                <span><small>2</small></span>
+                <span><small>3</small></span>
+              </div>
+            </div>
+
+          </div>
+          <div>
+
+          </div>
+        </div>
+
+
+
+      </main>
+    </section>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="adaptationModal" tabindex="-1" aria-labelledby="adaptationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered ">
+      <div class="modal-content cbg-tertiary">
+        <div class="modal-header border-0">
+          <h5 class="modal-title text-uppercase pt-1" id="adaptationModalLabel">
+            <!-- Modal title goes here -->
+          </h5>
+          <button type="button" class="btn-close rounded-circle bg-light" data-bs-dismiss="modal"
+            aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="card">
+            <div class="card-body">
+              <table class="table table-light table-stripped table-responsive" id='adaptiveMeasureTable'>
+                <tbody class="text-capitalize">
+                  <!-- cost measure goes here -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
