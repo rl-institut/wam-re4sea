@@ -13,4 +13,4 @@ After that you only need to start with
 
     docker-compose up
 
-The Server will listen on port 8081
+The Server will listen on port `8081`
