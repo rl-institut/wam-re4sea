@@ -17,9 +17,11 @@ import {
 import {costAdaptation} from '../data/adaptation-measure';
 import {seeMoreBtn} from '../js/elements'
 
-const image = require('../assets/island.png');
 
-mapboxgl.accessToken = '';
+//const image = require('../assets/island.png');
+import iconImage from '../assets/icon-image'
+
+mapboxgl.accessToken = MAPBOXTOKEN;
 
 
 
@@ -48,24 +50,19 @@ map.addControl(new mapboxgl.ScaleControl({maxWidth: 80, unit: 'metric'}))
 
 map.on('load', () => {
 
-    map.loadImage(image, (error, image) => {
-        if (error) throw error;
-        // add image to the active style and make it SDF-enabled
-        map.addImage('island-icon', image,);
-    });
-
-
+    // add image to the active style and make it SDF-enabled
+    map.addImage('island-icon', iconImage);
+    console.dir(map);
 
     map.addSource("islands_points_source", {
         type: "vector",
-        tiles:[`http://localhost:8080/geoserver/Re4Sea/gwc/service/wmts?layer=Location_data&tilematrixset=EPSG:900913&Service=WMTS&Request=GetTile&Version=1.0.0&Format=application/x-protobuf;type=mapbox-vector&TileMatrix=EPSG:900913:{z}&TileCol={x}&TileRow={y}`],
+        tiles:[`https://tile-internal.rl-institut.de/data/island/{z}/{x}/{y}.pbf`],
   
     });
 
     map.addSource('islands_layer_source', {
         type: 'vector',
-        tiles: ['http://localhost:8080/geoserver/Re4Sea/gwc/service/wmts?layer=SEA_shape&tilematrixset=EPSG:900913&Service=WMTS&Request=GetTile&Version=1.0.0&Format=application/x-protobuf;type=mapbox-vector&TileMatrix=EPSG:900913:{z}&TileCol={x}&TileRow={y}'],
-      
+        tiles: ['https://tile-internal.rl-institut.de/data/seashapes/{z}/{x}/{y}.pbf']
     });
 
 
@@ -74,7 +71,9 @@ map.on('load', () => {
         id: "island-points",
         type: "symbol",
         source: "islands_points_source",
-        "source-layer": "Location_data",
+        "source-layer": "Island_points",
+        minzoom: 2,
+        maxzoom: 20,
         layout: {
             'icon-image': 'island-icon',
             'icon-size': 0.5
@@ -143,7 +142,6 @@ map.on('load', () => {
         map.getCanvas().style.cursor = '';
     })
 });
-
 
 
 
