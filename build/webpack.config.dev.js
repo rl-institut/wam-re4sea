@@ -18,6 +18,8 @@ const webpackConfigDev = webpackMerge(webpackConfigBase, {
   },
   devServer: {
     contentBase: path.resolve(__dirname, '../dist'),
+    compress: false,
+    host: "0.0.0.0",
     port: 8081,
     watchOptions: {
       poll: 1000,
@@ -31,6 +33,10 @@ const webpackConfigDev = webpackMerge(webpackConfigBase, {
     new MiniCssExtractPlugin({
       filename: 'css/[name].css',
       chunkFilename: 'css/[id].css',
+    }),
+    
+    new webpack.DefinePlugin({
+      'MAPBOXTOKEN': "'YOURMAPBOXTOKEN'"
     }),
 
     new webpack.ProvidePlugin({
